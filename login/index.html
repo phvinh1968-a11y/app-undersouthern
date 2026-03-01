@@ -31,7 +31,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative; /* Thêm để định vị footer con */
+            position: relative;
         }
 
         body::before {
@@ -44,12 +44,13 @@
             z-index: 999;
         }
 
+        /* CSS THAY ĐỔI: Thu nhỏ khung card */
         .login-card {
             background-color: var(--card-bg);
             border: 1px solid var(--line);
-            width: 100%;
-            max-width: 360px;
-            margin-bottom: 60px; /* Tạo khoảng trống để không bị footer đè lên */
+            width: 90%;
+            max-width: 310px; /* Thu nhỏ từ 360px xuống 310px */
+            margin-bottom: 40px;
         }
         
         .login-input { 
@@ -57,7 +58,7 @@
             border: none;
             border-bottom: 1px solid var(--line);
             border-radius: 0;
-            padding: 12px 0;
+            padding: 10px 0; /* Giảm padding input */
             transition: 0.3s;
         }
         
@@ -70,8 +71,8 @@
             border: 1px solid #333;
             border-top: 1px solid #fff;
             border-radius: 50%;
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             animation: spin 0.8s linear infinite;
         }
 
@@ -88,7 +89,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Footer luôn nằm dưới cùng */
         .footer-fixed {
             position: fixed;
             bottom: 2rem;
@@ -98,7 +98,6 @@
             z-index: 10;
         }
 
-        /* Ẩn footer nếu màn hình quá thấp để tránh đè form */
         @media (max-height: 500px) {
             .footer-fixed { position: static; margin-top: 2rem; padding-bottom: 2rem; }
             body { align-items: flex-start; padding-top: 2rem; overflow-y: auto; }
@@ -112,48 +111,50 @@
     </div>
 
     <div id="content-screen" class="hidden w-full flex flex-col items-center justify-center p-4 min-h-screen">
-        <div class="login-card p-10 shadow-sm relative fade-in">
+        <div class="login-card p-8 shadow-sm relative fade-in">
             
             <div id="login-form-content">
-                <div class="mb-12"> 
-                    <img src="https://raw.githubusercontent.com/phvinh1968-a11y/my-images/main/logoblack.png" 
-                         alt="Logo" class="w-24 mx-auto opacity-90 contrast-125 grayscale">
+                <div class="mb-10"> 
+                    <a href="https://undersouthern.asia/" class="block transition-all duration-300 hover:opacity-60 active:scale-95">
+                        <img src="https://raw.githubusercontent.com/phvinh1968-a11y/my-images/main/logoblack.png" 
+                             alt="Logo" class="w-20 mx-auto opacity-90 contrast-125 grayscale cursor-pointer">
+                    </a>
                 </div>
 
-                <form onsubmit="return handleMockLogin(event)" class="space-y-8">
+                <form onsubmit="return handleMockLogin(event)" class="space-y-6">
                     <div class="relative">
-                        <label class="block text-[10px] font-medium text-[#6b6b6b] mb-1 uppercase tracking-wider">username</label>
+                        <label class="block text-[9px] font-medium text-[#6b6b6b] mb-1 uppercase tracking-wider">username</label>
                         <input type="text" id="username" required
-                               class="login-input w-full text-sm placeholder:text-zinc-300"
+                               class="login-input w-full text-xs placeholder:text-zinc-300"
                                placeholder="enter username">
                     </div>
                     
                     <div class="relative">
-                        <label class="block text-[10px] font-medium text-[#6b6b6b] mb-1 uppercase tracking-wider">password</label>
+                        <label class="block text-[9px] font-medium text-[#6b6b6b] mb-1 uppercase tracking-wider">password</label>
                         <input type="password" id="password" required
-                               class="login-input w-full text-sm placeholder:text-zinc-300"
+                               class="login-input w-full text-xs placeholder:text-zinc-300"
                                placeholder="enter password">
                     </div>
                     
-                    <button type="submit" id="login-btn" class="w-full bg-black text-white py-4 text-[11px] font-medium hover:opacity-80 transition-all uppercase tracking-[0.2em]">
+                    <button type="submit" id="login-btn" class="w-full bg-black text-white py-3.5 text-[10px] font-medium hover:opacity-80 transition-all uppercase tracking-[0.2em]">
                         sign in
                     </button>
 
-                    <div class="flex flex-col items-center space-y-4 pt-4">
-                        <p onclick="showResetPage()" class="text-[10px] text-zinc-400 hover:text-black cursor-pointer transition-colors">
+                    <div class="flex flex-col items-center space-y-4 pt-2">
+                        <p onclick="showResetPage()" class="text-[9px] text-zinc-400 hover:text-black cursor-pointer transition-colors">
                             forgot password?
                         </p>
                         
                         <div class="w-full h-[1px] bg-zinc-200"></div>
                         
                         <div class="relative w-full text-center">
-                            <div class="inline-flex items-center space-x-2 cursor-pointer text-[10px] text-zinc-500" onclick="toggleLangMenu(event)">
-                                <span id="current-flag" class="border border-zinc-300 px-1 rounded-sm text-[8px] font-bold">EN</span>
+                            <div class="inline-flex items-center space-x-2 cursor-pointer text-[9px] text-zinc-500" onclick="toggleLangMenu(event)">
+                                <span id="current-flag" class="border border-zinc-300 px-1 rounded-sm text-[7px] font-bold">EN</span>
                                 <span id="current-lang-text">english</span>
-                                <i class="fa-solid fa-caret-down text-[8px]"></i>
+                                <i class="fa-solid fa-caret-down text-[7px]"></i>
                             </div>
                             
-                            <div id="lang-menu" class="hidden absolute bottom-full left-1/2 -translate-x-1/2 w-32 bg-white border border-zinc-200 shadow-xl mb-4 z-50 text-[10px]">
+                            <div id="lang-menu" class="hidden absolute bottom-full left-1/2 -translate-x-1/2 w-28 bg-white border border-zinc-200 shadow-xl mb-4 z-50 text-[9px]">
                                 <div class="p-2 hover:bg-zinc-50 cursor-pointer border-b border-zinc-100" onclick="selectLang('EN', 'english')">english</div>
                                 <div class="p-2 hover:bg-zinc-50 cursor-pointer" onclick="selectLang('VN', 'tiếng việt')">tiếng việt</div>
                             </div>
@@ -163,18 +164,18 @@
             </div>
 
             <div id="reset-password-content" class="hidden text-center">
-                <h2 class="text-sm font-medium mb-8">reset access</h2>
-                <form onsubmit="event.preventDefault();" class="space-y-8">
+                <h2 class="text-xs font-medium mb-8">reset access</h2>
+                <form onsubmit="event.preventDefault();" class="space-y-6">
                     <div class="text-left">
-                        <label class="block text-[10px] font-medium text-[#6b6b6b] mb-1 uppercase tracking-wider">identity</label>
-                        <input type="text" placeholder="username or email" class="login-input w-full text-sm">
+                        <label class="block text-[9px] font-medium text-[#6b6b6b] mb-1 uppercase tracking-wider">identity</label>
+                        <input type="text" placeholder="username or email" class="login-input w-full text-xs">
                     </div>
                     
-                    <button type="button" class="w-full bg-zinc-100 text-zinc-400 py-4 text-[10px] uppercase tracking-widest cursor-not-allowed">
+                    <button type="button" class="w-full bg-zinc-100 text-zinc-400 py-3.5 text-[9px] uppercase tracking-widest cursor-not-allowed">
                         request link
                     </button>
 
-                    <p onclick="showLoginPage()" class="text-[10px] text-zinc-500 hover:underline cursor-pointer pt-4 block">
+                    <p onclick="showLoginPage()" class="text-[9px] text-zinc-500 hover:underline cursor-pointer pt-4 block">
                         back to terminal
                     </p>
                 </form>
@@ -182,12 +183,11 @@
         </div>
         
         <div class="footer-fixed">
-            <p class="text-[9px] text-zinc-400 uppercase tracking-widest">label portal system v1.0</p>
+            <p class="text-[8px] text-zinc-400 uppercase tracking-widest">label portal system v1.0</p>
         </div>
     </div>
 
     <script>
-        // Giữ nguyên toàn bộ logic script của bạn
         const MASTER_USER = "UNDERSOUTHERN";
         const MASTER_PASS = "UNDERSOUTHERN2026//";
         const DB_URL = "https://undersouthern-system-default-rtdb.asia-southeast1.firebasedatabase.app/users.json";
@@ -196,7 +196,7 @@
             setTimeout(function() {
                 document.getElementById('loader-screen').style.display = 'none';
                 document.getElementById('content-screen').classList.remove('hidden');
-            }, 2000);
+            }, 800); 
         });
 
         async function handleMockLogin(event) {
@@ -246,8 +246,8 @@
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('activeUser', username);
             setTimeout(() => {
-                window.location.href = "https://app.undersouthern.asia/dashboard"; 
-            }, 800);
+                window.location.href = "/dashboard"; 
+            }, 500);
             return false;
         }
 
