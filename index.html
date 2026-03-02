@@ -1,16 +1,243 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <title>login</title>
-    <meta http-equiv="refresh" content="0; url=/login">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/phvinh1968-a11y/my-images/main/logoblack.png">
+    <title>Login – UNDERSOUTHERN Portal</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #000; margin: 0; padding: 0; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        :root {
+            --line-thin-white: 1.5px solid #ffffff;
+            --transition: 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            min-height: 100dvh; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: none !important; /* Luôn ẩn chuột hệ thống */
+        }
+
+        /* Đảm bảo tất cả thành phần tương tác không hiện bàn tay */
+        a, button, .portal-card, i, #modal-overlay {
+            cursor: none !important;
+        }
+
+        /* LOADER */
+        #loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 20000;
+            transition: opacity 0.6s ease;
+        }
+        .loader-logo { width: 80px; animation: pulse 1.5s infinite ease-in-out; }
+        @keyframes pulse {
+            0%, 100% { transform: scale(0.9); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        .loader-hidden { opacity: 0; visibility: hidden; }
+
+        /* VIDEO BACKGROUND */
+        #video-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; z-index: -2; opacity: 0.12; filter: grayscale(1);
+        }
+
+        /* CUSTOM CURSOR (Dấu cộng) */
+        #custom-cursor {
+            position: fixed; width: 30px; height: 30px;
+            pointer-events: none; z-index: 25000; opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #custom-cursor::before {
+            content: ''; position: absolute; background: #fff;
+            width: 100%; height: 6px; top: 12px; left: 0;
+            clip-path: polygon(0 0, 40% 0, 40% 100%, 0 100%, 0 0, 60% 0, 60% 100%, 100% 100%, 100% 0);
+        }
+        #custom-cursor::after {
+            content: ''; position: absolute; background: #fff;
+            width: 6px; height: 100%; left: 12px; top: 0;
+            clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%, 0 60%, 100% 60%, 100% 100%, 0 100%);
+        }
+
+        /* PORTAL WRAPPER */
+        .portal-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            z-index: 5;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 500px; 
+        }
+
+        .portal-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            color: #fff;
+            border: var(--line-thin-white);
+            padding: 2.2rem clamp(2rem, 5vw, 4rem); 
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            text-align: center;
+        }
+
+        .portal-card h2 {
+            font-weight: 700;
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem); 
+            text-transform: uppercase;
+            letter-spacing: 0.35em;
+            margin-bottom: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .portal-card p {
+            font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+            font-style: italic;
+            opacity: 0.5;
+        }
+
+        @media (hover: hover) {
+            .portal-card:hover { background: rgba(255, 255, 255, 0.08); transform: scale(1.02); }
+            .portal-card:hover h2 { font-style: italic; letter-spacing: 0.45em; }
+        }
+
+        /* MODAL */
+        #modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center; align-items: center;
+            z-index: 20000;
+            backdrop-filter: blur(10px);
+        }
+        .modal-box {
+            background: #000;
+            border: var(--line-thin-white);
+            padding: 3rem 2rem;
+            text-align: center;
+            max-width: 350px;
+            width: 90%;
+            position: relative;
+            animation: modalFade 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        @keyframes modalFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-box h3 {
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        .close-x {
+            position: absolute;
+            top: 15px; right: 15px;
+            color: #fff;
+            font-size: 1.2rem;
+            background: none;
+            border: none;
+            padding: 5px;
+            transition: var(--transition);
+        }
+        .close-x:hover { transform: rotate(90deg); opacity: 0.7; }
+
+        /* BACK HOME */
+        .back-home {
+            position: absolute;
+            bottom: 35px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.4;
+            transition: var(--transition);
+        }
+        .back-home:hover { opacity: 1; font-style: italic; }
+
+        @media (max-width: 480px) {
+            #custom-cursor { display: none; }
+            body, a, .portal-card, button { cursor: auto !important; }
+        }
     </style>
-    <script>
-        // Điều hướng ngay lập tức trước khi trang kịp render
-        window.location.replace("/login");
-    </script>
 </head>
-<body></body>
+<body>
+
+    <div id="loader">
+        <img src="https://raw.githubusercontent.com/phvinh1968-a11y/my-images/main/logoblack.png" alt="Logo" class="loader-logo">
+    </div>
+
+    <video autoplay muted loop playsinline id="video-bg">
+        <source src="https://raw.githubusercontent.com/phvinh1968-a11y/my-images/main/video_background.mp4" type="video/mp4">
+    </video>
+
+    <div id="custom-cursor"></div>
+
+    <div id="modal-overlay" onclick="closeModal()">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <button class="close-x" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            <h3>Currently Unavailable</h3>
+        </div>
+    </div>
+
+    <div class="portal-wrapper">
+        <a href="javascript:void(0)" class="portal-card" onclick="openModal()">
+            <h2>Artist Portal</h2>
+            <p>Monetization & Analytics</p>
+        </a>
+
+        <a href="https://app.undersouthern.asia/login" class="portal-card">
+            <h2>Distribution Portal</h2>
+            <p>Label & Partners Gateway</p>
+        </a>
+    </div>
+
+    <a href="https://undersouthern.asia/" class="back-home">Back to Home</a>
+
+    <script>
+        const loader = document.getElementById('loader');
+        const cursor = document.getElementById('custom-cursor');
+        const modal = document.getElementById('modal-overlay');
+        let firstMove = true;
+
+        function openModal() { modal.style.display = 'flex'; }
+        function closeModal() { modal.style.display = 'none'; }
+
+        window.addEventListener('load', () => {
+            setTimeout(() => { loader.classList.add('loader-hidden'); }, 1200); 
+        });
+
+        // Xử lý di chuyển dấu cộng
+        document.addEventListener('mousemove', (e) => {
+            if (window.innerWidth > 768) {
+                if (firstMove) { cursor.style.opacity = '1'; firstMove = false; }
+                requestAnimationFrame(() => {
+                    cursor.style.left = (e.clientX - 15) + 'px';
+                    cursor.style.top = (e.clientY - 15) + 'px';
+                });
+            }
+        });
+    </script>
+</body>
 </html>
